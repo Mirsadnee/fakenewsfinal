@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="static/iconfake.jpg" rel="icon">
+    <link href="static/icons8-facebook-ios-16-filled-96.png" rel="icon">
+    <title>Fake News Detection - API Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            background-color: #333;
+            padding: 15px 20px;
+            color: white;
+            text-align: center;
+        }
+        .article-list {
+            padding: 20px;
+            margin: 20px auto;
+            width: 80%;
+            max-width: 900px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .article {
+            margin-bottom: 20px;
+        }
+        .article h3 {
+            font-size: 20px;
+        }
+        .article p {
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Fake News Detection - News API Results</h1>
+</header>
+
+<section class="article-list">
+    {% for article in articles %}
+    <div class="article">
+        <h3>{{ article.title }}</h3>
+        <p><strong>Source:</strong> {{ article.source.name }}</p>
+        <p><strong>Published:</strong> {{ article.publishedAt }}</p>
+        <p>{{ article.description }}</p>
+        <a href="{{ article.url }}" target="_blank">Read more</a>
+    </div>
+    {% endfor %}
+</section>
+
+<footer>
+    &copy; 2024 Fake News Detection. All rights reserved.
+</footer>
+
+</body>
+</html>

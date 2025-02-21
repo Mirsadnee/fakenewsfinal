@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <style>
+        /* Sfond me gradient */
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #4caf50, #81c784);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+
+        /* Stilizimi i formularit */
+        form {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            width: 320px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #4caf50;
+            outline: none;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #43a047, #1b5e20);
+        }
+
+        .back-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #e53935, #d32f2f);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: background-color 0.3s;
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(135deg, #c62828, #b71c1c);
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+            margin-top: 20px;
+            animation: shake 0.3s ease;
+        }
+
+        /* Animacion shake për gabimin */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .timer {
+            text-align: center;
+            color: #777;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <form method="POST">
+        <h2>Futni OTP për verifikim</h2>
+        <label for="otp">OTP:</label>
+        <input type="text" id="otp" name="otp" required>
+        <button type="submit">Verify OTP</button>
+
+        <!-- Butoni për t'u kthyer -->
+        <a href="{{ url_for('login') }}">
+            <button type="button" class="back-btn">Kthehu në Login</button>
+        </a>
+
+        <div class="timer" id="timer"></div>
+    </form>
+
+    <script>
+        var timeLeft = 120;
+
+        function startTimer() {
+            var timerDisplay = document.getElementById('timer');
+            var timer = setInterval(function () {
+                var minutes = Math.floor(timeLeft / 60);
+                var seconds = timeLeft % 60;
+                timerDisplay.innerHTML = `OTP do të skadojë për: ${minutes} minutë dhe ${seconds} sekonda`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    timerDisplay.innerHTML = "OTP ka skaduar, rifreskoni për të marrë një të ri.";
+                }
+                timeLeft -= 1;
+            }, 1000);
+        }
+
+        window.onload = startTimer;
+    </script>
+</body>
+</html>

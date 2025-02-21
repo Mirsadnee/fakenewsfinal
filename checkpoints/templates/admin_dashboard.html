@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .navbar a.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .back-btn {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+            font-size: 17px;
+            background-color: #f44336;
+        }
+
+        .back-btn:hover {
+            background-color: #e53935;
+        }
+
+        /* Other styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table th, table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        table th {
+            background-color: #333;
+            color: white;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-edit {
+            background-color: #ffc107;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-edit:hover {
+            background-color: #e0a800;
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+
+        .btn-save {
+            background-color: #28a745;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-save:hover {
+            background-color: #218838;
+        }
+
+        form {
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .action-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .new-user-form {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .new-user-form input {
+            padding: 8px;
+            margin: 10px 0;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .new-user-form button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .new-user-form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="/">Home</a>
+        <a href="/admin">Dashboard</a>
+        <a href="/logout">Logout</a>
+        
+    </div>
+
+    <div class="container">
+        <h1>Panels in Administration</h1>
+
+        <!-- Forma për shtimin e përdoruesve të rinj -->
+        <div class="new-user-form">
+            <h3>Add new users</h3>
+            <form method="POST" action="/admin/add-user">
+                <label for="new_admin_username">Username:</label>
+                <input type="text" name="new_admin_username" required>
+
+                <label for="new_admin_email">Email:</label>
+                <input type="email" name="new_admin_email" required>
+
+                <label for="new_admin_password">Password:</label>
+                <input type="password" name="new_admin_password" required>
+
+                <label for="new_admin_role">Make admin:</label>
+                <input type="checkbox" name="new_admin_role">
+
+                <button type="submit">Add User</button>
+            </form>
+        </div>
+
+        <!-- Tabela për shfaqjen e përdoruesve -->
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Admin</th>
+                    <th>Created At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <form method="POST" action="/admin/update-user">
+                        <td>{{ user.id }}</td>
+                        <td><input type="text" name="username" value="{{ user.username }}" required></td>
+                        <td><input type="email" name="email" value="{{ user.email }}" required></td>
+                        <td>
+                            <input type="checkbox" name="is_admin" {% if user.is_admin %}checked{% endif %}>
+                        </td>
+                        <td>{{ user.created_at }}</td>
+                        <td class="action-container">
+                            <!-- Përditëso përdoruesin -->
+                            <input type="hidden" name="user_id" value="{{ user.id }}">
+                            <button type="submit" class="btn btn-save">Save</button>
+
+                            <!-- Fshi përdoruesin -->
+                            <form method="POST" action="/admin/delete-user" style="display: inline;">
+                                <input type="hidden" name="id" value="{{ user.id }}">
+                                <button type="submit" class="btn btn-delete">Delete</button>
+                            </form>
+                        </td>
+                    </form>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

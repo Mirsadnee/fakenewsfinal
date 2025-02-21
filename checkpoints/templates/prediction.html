@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fake News Detection</title>
+    <link href="static/iconfake.jpg" rel="icon">
+
+    <!-- Style -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #333;
+            padding: 10px 20px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center logo and text */
+        }
+
+        header .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+        }
+
+        header .logo svg {
+            margin-right: 10px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #333;
+            padding: 10px 0;
+            width: 100%;
+            margin: 0; /* Remove margin-top */
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            background-color: transparent;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: white;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .form-section {
+            background-color: #fff;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-title {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .predict-btn {
+            background-color: #050505;
+            color: white;
+            padding: 12px 24px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .predict-btn:hover {
+            background-color: #444644;
+        }
+
+        .result-section {
+            padding: 20px;
+            background-color: #fff;
+            margin: 20px auto;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: auto;
+        }
+
+        /* Responsive design for smaller screens */
+        @media screen and (max-width: 1024px) {
+            nav {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .form-section, .result-section {
+                max-width: 90%;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            header {
+                font-size: 18px;
+            }
+
+            nav a {
+                margin: 0 10px;
+                font-size: 16px;
+            }
+
+            .form-title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="32" height="32" viewBox="0 0 24 24">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+            </svg>
+        <div class="logo">Fake News Detection</div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="/">Home</a>
+        <a href="/predict">Prediction</a>
+        {% if session['is_admin'] %}
+        <a href="{{ url_for('admin_dashboard') }}">Admin Panel</a>
+        {% endif %}
+        <a href="/profile">Profile</a>
+        <a href="/logout">Logout</a>
+    </nav>
+
+    <!-- Form Section -->
+    <div class="form-section">
+        <h2 class="form-title">Fake News Prediction</h2>
+        <form method="POST" action="/predict">
+            <!-- Input for news headline -->
+            <input type="text" class="form-control" id="news" name="news" placeholder="Enter headline to analyze" required>
+            <button type="submit" class="predict-btn">Predict</button>
+        </form>
+    </div>
+
+    <!-- Result Section -->
+    {% if prediction %}
+    <div class="result-section">
+        <h2>Prediction Result:</h2>
+        <p>{{ prediction }}</p>
+    </div>
+    {% endif %}
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Fake News Detection. All rights reserved.</p>
+    </footer>
+</body>
+</html>
